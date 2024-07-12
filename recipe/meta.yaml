@@ -1,6 +1,5 @@
 {% set version = "2.0.0" %}
 {% set posix = 'm2-' if win else '' %}
-{% set native = 'm2w64-' if win else '' %}
 
 package:
   name: r-htree
@@ -13,8 +12,9 @@ source:
   sha256: 8b3709dc0ead4ac46859a660a5174c5dc843083a5a84392e8cf02972052b7195
 
 build:
-  number: 1004
-  skip: true  # [win]
+  number: 1005
+  # Checking windows to see if it passes. Uncomment the line if it fails.
+  # skip: true  # [win]
   rpaths:
     - lib/R/lib/
     - lib/
@@ -22,7 +22,9 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}              # [not win]
+    - {{ stdlib("c") }}                # [not win]
     - {{ compiler('m2w64_c') }}        # [win]
+    - {{ stdlib("m2w64_c") }}          # [win]
     - {{ posix }}filesystem        # [win]
     - {{ posix }}make
     - {{ posix }}sed               # [win]
@@ -33,7 +35,6 @@ requirements:
     - r-base
   run:
     - r-base
-    - {{ native }}gcc-libs         # [win]
 
 test:
   commands:
